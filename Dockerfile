@@ -1,15 +1,16 @@
-# Step 1: Use a lightweight OpenJDK 21 or 25 image
-# Using 21 as it is the stable LTS, but 25 works if your repo supports it
-FROM eclipse-temurin:21-jre-alpine
-
-# Step 2: Set the working directory inside the container
+# Stage 1: Build the JAR
+FROM maven:3.9.6-eclipse-temurin-21 AS build
 WORKDIR /app
+# Copy the pom and source code
+COPY pom.xml .
+COPY src ./src
+# Build the JAR
+RUN mvn clean package -DskipTests
 
-# Step 3: Copy the Fat JAR from your target folder to the container
-COPY target/inventory-app-java-1.0-SNAPSHOT.jar app.jar
-
-# Step 4: Expose the port your API is listening on
+# Stage 2: Final Image
+FROM eclipse-temurin:21-jre-alpine
+WORKDIR /app
+# Copy the JAR from the 'build' stage
+COPY --from=build /app/target/inventory-app-java-1.0-SNAPSHOT.jar app.jar
 EXPOSE 8081
-
-# Step 5: Run the application
 ENTRYPOINT ["java", "-jar", "app.jar"]
