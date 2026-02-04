@@ -1,5 +1,5 @@
 # STAGE 1: Build with Java 25 Early Access JDK
-FROM openjdk:25-ea-jdk-slim AS builder
+FROM openjdk:26-ea-jdk-slim AS builder
 WORKDIR /app
 
 # Install Maven inside the Java 25 image
@@ -12,7 +12,7 @@ COPY src ./src
 RUN mvn clean package -DskipTests
 
 # STAGE 2: Run with Java 25 Early Access Runtime
-FROM openjdk:25-ea-jre-slim
+FROM openjdk:26-ea-jre-slim
 WORKDIR /app
 
 # Copy the JAR from the builder stage
