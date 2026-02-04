@@ -1,7 +1,4 @@
-# STAGE 1: Build with Java 25 Early Access
-FROM maven:3.9-openjdk-21 AS build
-# We use Maven on 21 to run the build, but we will target Java 25 
-# OR we can use the openjdk:25 image and install maven manually
+# STAGE 1: Build with Java 25 Early Access JDK
 FROM openjdk:25-ea-jdk-slim AS builder
 WORKDIR /app
 
